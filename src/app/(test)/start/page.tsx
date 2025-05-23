@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { User, Users, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 
 type AgeRange = 'under18' | '19-25' | '26-50' | 'over51';
 type Gender = 'male' | 'female';
@@ -33,16 +34,16 @@ export default function StartTestPage() {
 
   // 성별 버튼 데이터
   const genderOptions = [
-    { value: 'male' as Gender, label: '남자' },
-    { value: 'female' as Gender, label: '여자' }
+    { value: 'male' as Gender, label: '남자', icon: <User size={20} /> },
+    { value: 'female' as Gender, label: '여자', icon: <User size={20} /> }
   ];
 
   // 나이 버튼 데이터
   const ageOptions = [
-    { value: 'under18' as AgeRange, label: '18세 이하' },
-    { value: '19-25' as AgeRange, label: '19~25세' },
-    { value: '26-50' as AgeRange, label: '26~50세' },
-    { value: 'over51' as AgeRange, label: '51세 이상' }
+    { value: 'under18' as AgeRange, label: '18세 이하', icon: <Calendar size={20} /> },
+    { value: '19-25' as AgeRange, label: '19~25세', icon: <Calendar size={20} /> },
+    { value: '26-50' as AgeRange, label: '26~50세', icon: <Calendar size={20} /> },
+    { value: 'over51' as AgeRange, label: '51세 이상', icon: <Calendar size={20} /> }
   ];
 
   // API 호출 함수
@@ -93,101 +94,113 @@ export default function StartTestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-md mx-auto">
-        {/* 로고/제목 */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            옥타그노시스 검사
-          </h1>
-          <div className="w-20 h-1 bg-indigo-600 mx-auto rounded" />
+    <div className="min-h-screen bg-gradient-to-tr from-slate-900 via-purple-900 to-slate-900 py-12 px-4 flex flex-col items-center justify-center">
+      {/* 로고 또는 서비스 이름 */}
+      <div className="text-center mb-10">
+        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg">
+          <Users size={28} className="text-white" />
         </div>
+        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 mb-2">
+          옥타그노시스 AI
+        </h1>
+        <p className="text-lg text-slate-400">당신의 성향을 찾아보세요</p>
+      </div>
 
-        {/* 메인 컨텐츠 */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 space-y-8">
-          {/* 성별 선택 섹션 */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">성별</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {genderOptions.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => setSelectedGender(option.value)}
-                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
-                    selectedGender === option.value
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300 hover:bg-indigo-50'
-                  }`}
-                  disabled={isLoading}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 나이 선택 섹션 */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">나이</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {ageOptions.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => setSelectedAgeRange(option.value)}
-                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
-                    selectedAgeRange === option.value
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300 hover:bg-indigo-50'
-                  }`}
-                  disabled={isLoading}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 에러 메시지 */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          )}
-
-          {/* NEXT 버튼 */}
-          <div className="pt-4">
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={isLoading}
-              className={`w-full py-4 rounded-lg font-bold text-lg transition-all duration-200 ${
-                isLoading
-                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02]'
-              }`}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  처리 중...
-                </div>
-              ) : (
-                'NEXT →'
-              )}
-            </button>
+      <div className="w-full max-w-lg bg-slate-800 bg-opacity-50 backdrop-blur-md rounded-xl shadow-2xl p-8 space-y-8 border border-slate-700">
+        {/* 성별 선택 */}
+        <div>
+          <h2 className="text-xl font-semibold text-slate-200 mb-1">성별을 선택해주세요</h2>
+          <p className="text-sm text-slate-400 mb-4">검사 결과 분석에 사용됩니다.</p>
+          <div className="grid grid-cols-2 gap-4">
+            {genderOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setSelectedGender(option.value)}
+                className={`group flex items-center justify-center space-x-2 py-4 px-4 rounded-lg border-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 ${
+                  selectedGender === option.value
+                    ? 'border-purple-500 bg-purple-500 bg-opacity-20 text-purple-300 shadow-lg'
+                    : 'border-slate-700 bg-slate-700 bg-opacity-40 text-slate-300 hover:border-purple-600 hover:text-purple-300'
+                }`}
+                disabled={isLoading}
+              >
+                {option.icon}
+                <span className="font-medium">{option.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* 진행 표시 */}
-        <div className="mt-6 text-center">
-          <div className="flex items-center justify-center space-x-2">
-            <div className="w-3 h-3 bg-indigo-600 rounded-full" />
-            <div className="w-3 h-3 bg-gray-300 rounded-full" />
-            <div className="w-3 h-3 bg-gray-300 rounded-full" />
+        {/* 나이 선택 */}
+        <div>
+          <h2 className="text-xl font-semibold text-slate-200 mb-1">나이대를 선택해주세요</h2>
+          <p className="text-sm text-slate-400 mb-4">맞춤형 분석을 위해 필요합니다.</p>
+          <div className="grid grid-cols-2 gap-4">
+            {ageOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setSelectedAgeRange(option.value)}
+                className={`group flex items-center justify-center space-x-2 py-4 px-4 rounded-lg border-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 ${
+                  selectedAgeRange === option.value
+                    ? 'border-purple-500 bg-purple-500 bg-opacity-20 text-purple-300 shadow-lg'
+                    : 'border-slate-700 bg-slate-700 bg-opacity-40 text-slate-300 hover:border-purple-600 hover:text-purple-300'
+                }`}
+                disabled={isLoading}
+              >
+                {option.icon}
+                <span className="font-medium">{option.label}</span>
+              </button>
+            ))}
           </div>
-          <p className="text-sm text-gray-500 mt-2">1/3 단계</p>
+        </div>
+
+        {/* 에러 메시지 */}
+        {error && (
+          <div className="bg-red-500 bg-opacity-20 border border-red-700 rounded-lg p-3 text-center">
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* NEXT 버튼 */}
+        <div className="pt-4">
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={isLoading || !selectedGender || !selectedAgeRange}
+            className={`w-full flex items-center justify-center space-x-2 py-4 rounded-lg font-semibold text-lg transition-all duration-300 ease-in-out transform hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 ${
+              isLoading || !selectedGender || !selectedAgeRange
+                ? 'bg-slate-600 text-slate-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl'
+            }`}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 size={22} className="animate-spin" />
+                <span>처리 중...</span>
+              </>
+            ) : (
+              <>
+                <span>NEXT</span>
+                <ArrowRight size={20} />
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* 진행 표시 */}
+      <div className="mt-10 w-full max-w-lg">
+        <div className="flex justify-between items-center text-xs text-slate-500 mb-2 px-1">
+          <span>정보 입력</span>
+          <span>성향 분석</span>
+          <span>결과 확인</span>
+        </div>
+        <div className="w-full bg-slate-700 rounded-full h-2">
+          <div
+            className="bg-gradient-to-r from-purple-500 to-indigo-500 h-2 rounded-full transition-all duration-500 ease-out"
+            style={{ width: '33%' }}
+          />
         </div>
       </div>
     </div>
